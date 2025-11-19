@@ -5,11 +5,10 @@ import Sidebar from "./Sidebar";
 export default function Layout({ children, page, darkMode, setDarkMode, setPage }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -22,7 +21,7 @@ export default function Layout({ children, page, darkMode, setDarkMode, setPage 
   }
 
   return (
-    <div className={darkMode ? "dark bg-black text-white min-h-screen" : "bg-white text-black min-h-screen"}>
+    <div className={`${darkMode ? "dark bg-black text-white" : "bg-white text-black"} min-h-screen transition-colors duration-300`}>
       {!hideUI && (
         <>
           <Navbar
@@ -34,7 +33,6 @@ export default function Layout({ children, page, darkMode, setDarkMode, setPage 
             setSidebarOpen={setSidebarOpen}
             setPage={setPage}
           />
-
           <Sidebar
             open={sidebarOpen}
             collapsed={collapsed}
@@ -42,6 +40,7 @@ export default function Layout({ children, page, darkMode, setDarkMode, setPage 
             setSidebarOpen={setSidebarOpen}
             isDesktop={isDesktop}
             setPage={setPage}
+            darkMode={darkMode}
           />
         </>
       )}

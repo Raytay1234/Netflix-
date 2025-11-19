@@ -2,14 +2,14 @@ import React, { useState } from "react";
 
 const PLACEHOLDER = "https://placehold.co/300x445?text=No+Poster";
 
-export default function MovieCard({ movie }) {
+export default function MovieCard({ movie, darkMode }) {
   const { title, name, poster_path } = movie;
   const displayTitle = title || name || "Untitled";
-  const imageUrl = poster_path
-    ? `https://image.tmdb.org/t/p/w500${poster_path}`
-    : PLACEHOLDER;
+  const imageUrl = poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : PLACEHOLDER;
 
   const [hovered, setHovered] = useState(false);
+
+  const bgColor = darkMode ? "bg-gray-800" : "bg-gray-200";
 
   return (
     <div
@@ -18,10 +18,7 @@ export default function MovieCard({ movie }) {
       onMouseLeave={() => setHovered(false)}
     >
       <div
-        className={`rounded-md overflow-hidden bg-gray-800 shadow-lg transition-transform duration-300
-          ${hovered ? "scale-105 z-10" : "scale-100"}
-          w-32 sm:w-36 md:w-40 lg:w-44 h-48 sm:h-56 md:h-64 lg:h-72
-        `}
+        className={`rounded-md overflow-hidden shadow-lg transition-transform duration-300 ${hovered ? "scale-105 z-10" : "scale-100"} ${bgColor} w-32 sm:w-36 md:w-40 lg:w-44 h-48 sm:h-56 md:h-64 lg:h-72`}
       >
         <img src={imageUrl} alt={displayTitle} className="w-full h-full object-cover" />
       </div>

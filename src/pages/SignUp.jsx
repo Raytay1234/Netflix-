@@ -1,101 +1,92 @@
 import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-export default function SignUp({ setPage, setUser }) {
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [confirmPassword, setConfirmPassword] = useState("");
-const [showPassword, setShowPassword] = useState(false);
+export default function SignUp({ setPage, setUser, darkMode }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-const handleSignUp = (e) => {
-e.preventDefault();
-if (password !== confirmPassword) {
-  alert("Passwords do not match!");
-  return;
-}
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    const savedProfiles = JSON.parse(localStorage.getItem("profiles")) || [];
 
-// Save user info to localStorage profiles
-const savedProfiles = JSON.parse(localStorage.getItem("profiles")) || [];
-const newProfile = { name, email, password, plan: "Basic", billing: "Next billing: TBD" };
-savedProfiles.push(newProfile);
-localStorage.setItem("profiles", JSON.stringify(savedProfiles));
+    if (savedProfiles.find((p) => p.email === email)) {
+      alert("A profile with this email already exists.");
+      return;
+    }
 
-// Update parent App state
-setUser(newProfile);
+    const newProfile = { name, email, password, plan: "Basic" };
+    const updatedProfiles = [...savedProfiles, newProfile];
+    localStorage.setItem("profiles", JSON.stringify(updatedProfiles));
 
-// Redirect to profile page
-setPage("profile");
-};
+    setUser(newProfile);
+    setPage("home");
+  };
 
-return ( <div className="min-h-screen flex items-center justify-center bg-black text-white"> <div className="bg-black/75 p-8 md:p-12 rounded-md w-full max-w-md shadow-lg"> <h1 className="text-3xl font-bold mb-6">Sign Up</h1> <form onSubmit={handleSignUp} className="flex flex-col gap-4">
-{/* Username */}
-<input
-type="text"
-placeholder="Username"
-value={name}
-onChange={(e) => setName(e.target.value)}
-required
-className="bg-[#323232] text-white px-4 py-3 rounded focus:outline-none focus:ring-1 focus:ring-red-600"
-/>
-      {/* Email */}
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="bg-[#323232] text-white px-4 py-3 rounded focus:outline-none focus:ring-1 focus:ring-red-600"
-      />
+  const cardBg = darkMode ? "bg-black/80" : "bg-white/90";
+  const inputBg = darkMode ? "bg-[#323232] text-white" : "bg-gray-200 text-black";
+  const textColor = darkMode ? "text-white" : "text-black";
+  const overlay = darkMode
+    ? "bg-gradient-to-t from-black/90 via-black/40 to-black/0"
+    : "bg-gradient-to-t from-white/90 via-white/50 to-white/0";
 
-      {/* Password */}
-      <div className="relative">
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="bg-[#323232] w-full text-white px-4 py-3 rounded focus:outline-none focus:ring-1 focus:ring-red-600"
+  return (
+    <div className={`${darkMode ? "bg-black text-white" : "bg-white text-black"} relative w-full h-screen`}>
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img
+          src="https://assets.nflxext.com/ffe/siteui/vlv3/8f7bd2e4-b1cf-41d5-94c3-90d92c1e099f/web/en-GB/large.jpg"
+          alt="Background"
+          className="w-full h-full object-cover opacity-50"
         />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
-        >
-          {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-        </button>
+        <div className={`absolute inset-0 ${overlay}`} />
       </div>
 
-      {/* Confirm Password */}
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        required
-        className="bg-[#323232] text-white px-4 py-3 rounded focus:outline-none focus:ring-1 focus:ring-red-600"
-      />
+      {/* Sign Up Card */}
+      <div className="relative z-10 flex justify-center items-center min-h-screen px-4">
+        <div className={`${cardBg} backdrop-blur-md p-8 md:p-12 rounded-md w-full max-w-md shadow-xl`}>
+          <h1 className={`text-3xl font-bold mb-6 ${textColor}`}>Sign Up</h1>
+          <form onSubmit={handleSignUp} className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={`${inputBg} px-4 py-3 rounded focus:outline-none focus:ring-1 focus:ring-red-600`}
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`${inputBg} px-4 py-3 rounded focus:outline-none focus:ring-1 focus:ring-red-600`}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`${inputBg} px-4 py-3 rounded focus:outline-none focus:ring-1 focus:ring-red-600`}
+              required
+            />
 
-      {/* Sign Up Button */}
-      <button className="bg-red-600 text-white font-semibold py-3 rounded hover:bg-red-700 transition">
-        Create Account
-      </button>
+            <button className="bg-red-600 text-white font-semibold py-3 rounded hover:bg-red-700 transition">
+              Sign Up
+            </button>
+          </form>
 
-      {/* Switch to Sign In */}
-      <p className="text-gray-400 mt-4 text-sm">
-        Already have an account?{" "}
-        <button
-          type="button"
-          onClick={() => setPage("signin")}
-          className="text-white hover:underline"
-        >
-          Sign in now
-        </button>
-      </p>
-    </form>
-  </div>
-</div>
-
-);
+          <p className={`mt-6 text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+            Already have an account?{" "}
+            <button
+              onClick={() => setPage("signin")}
+              className={`${textColor} hover:underline`}
+            >
+              Sign in
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }

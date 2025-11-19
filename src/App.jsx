@@ -31,32 +31,33 @@ const NewAndPopular = () => (
   </div>
 );
 
-export default function App() {
-  const [page, setPage] = useState("signin");
-  const [darkMode, setDarkMode] = useState(false);
-  const [user, setUser] = useState(null);
+  export default function App() {
+    const [page, setPage] = useState("signin");
+    const [darkMode, setDarkMode] = useState(false);
+    const [user, setUser] = useState(null);
 
-  const pages = {
-    signin: <SignIn setPage={setPage} setUser={setUser} />,
-    signup: <SignUp setPage={setPage} setUser={setUser} />,
-    home: <Home />,
-    profile: <Profile setPage={setPage} user={user} />,
-    account: <Account setPage={setPage} user={user} />,
-    mylist: <MyList />,
-    profiles: <Profiles setPage={setPage} user={user} setUser={setUser} />,
-    tvshows: <TVShows />,
-    movies: <Movies />,
-    new: <NewAndPopular />,
-  };
+    const pages = {
+      signin: <SignIn setPage={setPage} setUser={setUser} />,
+      signup: <SignUp setPage={setPage} setUser={setUser} />,
+      home: <Home darkMode={darkMode} />,
+      profile: <Profile setPage={setPage} user={user} darkMode={darkMode} />,
+      account: <Account setPage={setPage} user={user} darkMode={darkMode} />,
+      mylist: <MyList darkMode={darkMode} />,
+      profiles: <Profiles setPage={setPage} user={user} setUser={setUser} darkMode={darkMode} />,
+      tvshows: <TVShows darkMode={darkMode} />,
+      movies: <Movies darkMode={darkMode} />,
+      new: <NewAndPopular darkMode={darkMode} />,
+    };
 
-  return (
-    <Layout
-      page={page}
-      darkMode={darkMode}
-      setDarkMode={setDarkMode}
-      setPage={setPage}
-    >
-      {pages[page] || <SignIn setPage={setPage} setUser={setUser} />}
-    </Layout>
-  );
-}
+    return (
+      <Layout
+        page={page}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        setPage={setPage}
+      >
+        {pages[page] || <SignIn setPage={setPage} setUser={setUser} />}
+      </Layout>
+    );
+  }
+

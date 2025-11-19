@@ -1,14 +1,13 @@
+import React, { useRef, useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import MovieCard from "./MovieCard";
-import { useRef, useState, useEffect } from "react";
 
-export default function MovieRow({ title, movies }) {
+export default function MovieRow({ title, movies, darkMode }) {
   const rowRef = useRef();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // Update window width on resize
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -35,16 +34,19 @@ export default function MovieRow({ title, movies }) {
     row.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
 
+  const textColor = darkMode ? "text-white" : "text-black";
+  const buttonBg = darkMode ? "bg-gray-900/50 hover:bg-gray-800" : "bg-black/50 hover:bg-black";
+
   return (
     <div className="relative my-6">
       {/* Section Title */}
-      <h2 className="text-white text-lg sm:text-xl md:text-2xl font-bold mb-3 px-2">{title}</h2>
+      <h2 className={`text-lg sm:text-xl md:text-2xl font-bold mb-3 px-2 ${textColor}`}>{title}</h2>
 
       {/* Left scroll button */}
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-black p-2 rounded-full text-white transition hidden md:flex"
+          className={`absolute left-0 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full text-white hidden md:flex ${buttonBg} transition-colors`}
         >
           <FaChevronLeft size={20} />
         </button>
@@ -56,7 +58,7 @@ export default function MovieRow({ title, movies }) {
         className="flex overflow-x-auto scrollbar-hide space-x-2 sm:space-x-3 md:space-x-4 px-2 scroll-smooth touch-pan-x"
       >
         {movies.map((m) => (
-          <MovieCard key={m.id || m.imdbID} movie={m} />
+          <MovieCard key={m.id || m.imdbID} movie={m} darkMode={darkMode} />
         ))}
       </div>
 
@@ -64,7 +66,7 @@ export default function MovieRow({ title, movies }) {
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-black p-2 rounded-full text-white transition hidden md:flex"
+          className={`absolute right-0 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full text-white hidden md:flex ${buttonBg} transition-colors`}
         >
           <FaChevronRight size={20} />
         </button>

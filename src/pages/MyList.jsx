@@ -1,7 +1,6 @@
-// pages/MyList.jsx
 import React, { useState } from "react";
 
-export default function MyList() {
+export default function MyList({ darkMode }) {
   const [myList, setMyList] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("myList")) || [];
@@ -10,18 +9,22 @@ export default function MyList() {
     }
   });
 
-  // Delete a movie
   const handleDelete = (id) => {
     const updatedList = myList.filter((movie) => movie.id !== id);
     setMyList(updatedList);
     localStorage.setItem("myList", JSON.stringify(updatedList));
   };
 
+  const bgClass = darkMode ? "bg-gray-900" : "bg-white";
+  const textClass = darkMode ? "text-white" : "text-black";
+  const secondaryText = darkMode ? "text-gray-400" : "text-gray-700";
+  const overlayBg = darkMode ? "bg-black/60" : "bg-black/50";
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white pt-20 px-6 md:px-12">
+    <div className={`${bgClass} ${textClass} min-h-screen pt-20 px-6 md:px-12 transition-colors duration-300`}>
       <h1 className="text-4xl font-bold mb-6">My List</h1>
       {myList.length === 0 ? (
-        <p className="text-gray-400">Your list is empty. Add movies to your list!</p>
+        <p className={`${secondaryText}`}>Your list is empty. Add movies to your list!</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {myList.map((movie) => (
@@ -34,7 +37,9 @@ export default function MyList() {
                 alt={movie.title}
                 className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div
+                className={`absolute inset-0 ${overlayBg} flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+              >
                 <h2 className="text-lg font-semibold">{movie.title}</h2>
                 <button
                   onClick={() => handleDelete(movie.id)}
