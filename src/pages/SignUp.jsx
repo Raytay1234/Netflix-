@@ -34,12 +34,17 @@ export default function SignUp({ setPage, setUser, darkMode }) {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/8f7bd2e4-b1cf-41d5-94c3-90d92c1e099f/web/en-GB/large.jpg"
+          src="https://assets.nflxext.com/ffe/siteui/vlv3/fe4aea29-d71f-4caf-a788-0ebdc53fe97e/web/en-large.jpg"
           alt="Background"
           className="w-full h-full object-cover opacity-50"
+          onError={(e) => {
+            e.target.src =
+              "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4";
+          }}
         />
         <div className={`absolute inset-0 ${overlay}`} />
       </div>
+
 
       {/* Sign Up Card */}
       <div className="relative z-10 flex justify-center items-center min-h-screen px-4">
